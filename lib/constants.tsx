@@ -1,26 +1,41 @@
 // Represents a sound model with its name and URL
 export interface SoundModel {
   name: string; // The name of the sound model
-  url: string;  // The URL to the model for generating sound
+  url: string; // The URL to the model for generating sound
+  value: string;
 }
 
 // An array of predefined sound models
 const SOUND_MODELS: SoundModel[] = [
   {
-    name: "Facebook - Fastspeech2",
+    name: "huggingface/mms-tts-kir (kg)",
+    url: "https://api-inference.huggingface.co/models/facebook/mms-tts-kir",
+    value: "0:(ru)",
+  },
+  {
+    name: "huggingface/mms-tts-rus (ru)",
+    url: "https://api-inference.huggingface.co/models/facebook/mms-tts-rus",
+    value: "1:(ru)",
+  },
+  {
+    name: "huggingface/fastspeech2-en-ljspeech (en)",
     url: "https://api-inference.huggingface.co/models/facebook/fastspeech2-en-ljspeech",
+    value: "2:(en)",
   },
   {
-    name: "ESPNET - Ljspeech",
+    name: "huggingface/ESPNET - Ljspeech (en)",
     url: "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits",
+    value: "3:(en)",
   },
   {
-    name: "Speechbrain - Ljspeech",
+    name: "huggingface/Speechbrain - Ljspeech (en)",
     url: "https://api-inference.huggingface.co/models/speechbrain/tts-tacotron2-ljspeech",
+    value: "4:(en)",
   },
   {
-    name: "Voicemod - Fastspeech2",
+    name: "huggingface/Voicemod - Fastspeech2 (en)",
     url: "https://api-inference.huggingface.co/models/Voicemod/fastspeech2-en-male1",
+    value: "5:(en)",
   },
 ];
 

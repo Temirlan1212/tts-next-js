@@ -4,12 +4,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,22 +25,49 @@ import { Textarea } from "./ui/textarea";
 import SOUND_MODELS, { SoundModel } from "@/lib/constants";
 
 // Define the validation schema for the form fields
-const FormSchema = z.object({
-  soundModel: z.string({
-    required_error: "Please select a Hugging Face sound model to use.",
-  }),
-  text: z.string({
-    required_error: "Please select a text for the model to use.",
-  }),
-});
+const FormSchema = z
+  .object({
+    soundModel: z.string({
+      required_error: "Пожалуйста, выберите для использования звуковую модель",
+    }),
+    text: z.string({
+      required_error: "Пожалуйста, выберите текст для используемой модели.",
+    }),
+  })
+  .superRefine(({ soundModel, text }, refinementContext) => {
+    if (soundModel.includes("(en)")) {
+      if (new RegExp("^[а-яА-Я0-9-]+$").test(text)) {
+        return refinementContext.addIssue({
+          message: "Пожалуйста, введите текст на латинице",
+          path: ["text"],
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
+
+    if (soundModel.includes("(ru)")) {
+      if (new RegExp("^[a-zA-Z0-9-]+$").test(text)) {
+        return refinementContext.addIssue({
+          message: "Пожалуйста, введите текст на кириллице",
+          path: ["text"],
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
+    return refinementContext;
+  });
 
 // Define the props interface for the GenerateSoundForm component
 interface GenerateSoundFormProps {
   handleGetAudio: (data: CreateSoundRequest) => void;
+  isLoading?: boolean;
 }
 
 // Main component function
-export function GenerateSoundForm({ handleGetAudio }: GenerateSoundFormProps) {
+export function GenerateSoundForm({
+  handleGetAudio,
+  isLoading,
+}: GenerateSoundFormProps) {
   // State for tracking form submission status
   const [formSubmitting, setFormSubmitting] = useState<boolean>(false);
 
@@ -54,21 +79,23 @@ export function GenerateSoundForm({ handleGetAudio }: GenerateSoundFormProps) {
   // Function to handle form submission
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setFormSubmitting(true);
-    
-    // Prepare the sound request object
+    const soundModel = SOUND_MODELS.find(
+      (item) => item.value === data.soundModel
+    );
+    if (!soundModel) return;
     const soundRequest: CreateSoundRequest = {
-      modelUrl: data.soundModel,
+      modelUrl: soundModel?.url,
       text: data.text,
     };
-    
+
     // Call the provided handler function with the sound request
     handleGetAudio(soundRequest);
-    
+
     setFormSubmitting(false);
   }
 
   return (
-    <div className="ml-8 mr-8">
+    <div>
       {/* Form component that uses react-hook-form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -78,7 +105,7 @@ export function GenerateSoundForm({ handleGetAudio }: GenerateSoundFormProps) {
             name="soundModel"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sound Model</FormLabel>
+                <FormLabel>Модельки</FormLabel>
                 {/* Select component for choosing a sound model */}
                 <Select
                   onValueChange={field.onChange}
@@ -87,21 +114,24 @@ export function GenerateSoundForm({ handleGetAudio }: GenerateSoundFormProps) {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
+                      <SelectValue placeholder="Выберите модель" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {/* Map through available sound models */}
                     {SOUND_MODELS.map((model: SoundModel, index: number) => (
-                      <SelectItem key={`${model.name}-${index}`} value={model.url}>
+                      <SelectItem
+                        key={`${model.name}-${index}`}
+                        value={model.value}
+                      >
                         {model.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>
-                  This model will generate your sound.
-                </FormDescription>
+                {/* <FormDescription>
+                  Эта модель будет генерировать ваш звук.
+                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
@@ -112,26 +142,26 @@ export function GenerateSoundForm({ handleGetAudio }: GenerateSoundFormProps) {
             name="text"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Text</FormLabel>
+                <FormLabel>Текст</FormLabel>
                 <FormControl>
                   {/* Textarea component for entering text */}
                   <Textarea
                     disabled={formSubmitting}
                     rows={6}
-                    placeholder="Enter your text here..."
+                    placeholder="Введите свой текст здесь..."
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  The text used to convert to sound.
-                </FormDescription>
+                {/* <FormDescription>
+                  Текст, используемый для преобразования в звук.
+                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
           />
           {/* Submit button */}
-          <Button type="submit" disabled={formSubmitting}>
-            Submit
+          <Button type="submit" loading={isLoading} disabled={formSubmitting}>
+            Перевести
           </Button>
         </form>
       </Form>
