@@ -5,12 +5,32 @@ export interface SoundModel {
   value: string;
 }
 
+export interface Languages {
+  value: string; // The name of the sound model
+  name: string; // The URL to the model for generating sound
+}
+
+const LANGUAGES: Languages[] = [
+  {
+    name: "Кыргызча",
+    value: "kg",
+  },
+  {
+    name: "English",
+    value: "en",
+  },
+  {
+    name: "Русский",
+    value: "ru",
+  },
+];
+
 // An array of predefined sound models
 const SOUND_MODELS: SoundModel[] = [
   {
     name: "huggingface/mms-tts-kir (kg)",
     url: "https://api-inference.huggingface.co/models/facebook/mms-tts-kir",
-    value: "0:(ru)",
+    value: "0:(kg)",
   },
   {
     name: "huggingface/mms-tts-rus (ru)",
@@ -40,4 +60,4 @@ const SOUND_MODELS: SoundModel[] = [
 ];
 
 // Export the array of sound models
-export default SOUND_MODELS;
+export { SOUND_MODELS, LANGUAGES };
