@@ -92,7 +92,13 @@ export default function GenerateSoundView() {
             handleGetAudio={handleGetAudio}
           />
 
-          <div>{audioUrl && <AudioPlayer autoPlay src={audioUrl!} />}</div>
+          <div>
+            {audioUrl && (
+              <audio controls className="w-full">
+                <source id="audioSource" type="audio/flac" src={audioUrl!} />
+              </audio>
+            )}
+          </div>
         </div>
       </div>
     </div>
