@@ -94,7 +94,7 @@ export default function GenerateSoundView() {
 
           <div>
             {audioUrl && (
-              <audio controls className="w-full">
+              <audio controls className="w-full" autoPlay>
                 <source id="audioSource" type="audio/flac" src={audioUrl!} />
               </audio>
             )}
