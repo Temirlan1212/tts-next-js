@@ -8,21 +8,25 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   // Check if the 'input' field is provided in the request body
-  if (!process.env.HUGGING_FACE_TOKEN) {
-    throw new Error("Missing 'Hugging Face Access Token'");
+  if (!process.env.ELEVEN_LABS_TOKEN) {
+    throw new Error("Missing 'Eleven Labs Access Token'");
+  }
+
+  if (!process.env.ELEVEN_LABS_URL) {
+    throw new Error("Missing 'Eleven Labs url'");
   }
 
   // Extract the 'modelUrl' and 'input' from the request body
   const input = requestBody.input;
 
   const response = await fetch(
-    `https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB`,
+    `${process.env.ELEVEN_LABS_URL}/v1/text-to-speech/pNInz6obpgDQGcFmaJgB`,
     {
       method: "POST",
       headers: {
         accept: "audio/mpeg",
         "Content-Type": "application/json",
-        "xi-api-key": "546d0aafdc5d6fee9f69c48c71aadc2f",
+        "xi-api-key": process.env.ELEVEN_LABS_TOKEN,
       },
       body: JSON.stringify({
         text: input,

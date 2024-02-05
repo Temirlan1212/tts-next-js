@@ -22,13 +22,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { Textarea } from "./ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import {
   SoundModel,
   SOUND_MODELS,
   LANGUAGES,
   Languages,
-} from "@/lib/constants";
+} from "../lib/constants";
 
 // Define the validation schema for the form fields
 const FormSchema = z
@@ -64,17 +64,17 @@ const FormSchema = z
     return refinementContext;
   });
 
-// Define the props interface for the GenerateSoundForm component
-interface GenerateSoundFormProps {
+// Define the props interface for the HuggingFaceForm component
+interface HuggingFaceFormProps {
   handleGetAudio: (data: CreateSoundRequest) => void;
   isLoading?: boolean;
 }
 
 // Main component function
-export function GenerateSoundForm({
+export function HuggingFaceForm({
   handleGetAudio,
   isLoading,
-}: GenerateSoundFormProps) {
+}: HuggingFaceFormProps) {
   // State for tracking form submission status
   const [formSubmitting, setFormSubmitting] = useState<boolean>(false);
   const [soundsModels, setSoundsModels] = useState(SOUND_MODELS);

@@ -28,17 +28,14 @@ export async function POST(request: Request): Promise<Response> {
   const input = requestBody.input;
 
   // Make a POST request to the specified 'modelUrl' using Hugging Face token for authorization
-  const response = await fetch(
-    modelUrl,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.HUGGING_FACE_TOKEN}`, // Use the correct token
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ inputs: input }),
-    }
-  );
+  const response = await fetch(modelUrl, {
+    headers: {
+      Authorization: `Bearer ${process.env.HUGGING_FACE_TOKEN}`, // Use the correct token
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({ inputs: input }),
+  });
 
   // Get the generated audio data as an ArrayBuffer
   const audioData = await response.arrayBuffer();

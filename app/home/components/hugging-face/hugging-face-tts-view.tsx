@@ -1,13 +1,12 @@
 "use client";
 
-import { GenerateSoundForm } from "@/components/GenerateSoundForm";
-import Loader from "@/components/Loader";
 import { useState } from "react";
+import { HuggingFaceForm } from "./components/hugging-face-form";
 
 /**
  * The main view component for generating sound using a pre-trained model.
  */
-export default function GenerateSoundView() {
+export default function HuggingFaceTTSView() {
   // State to manage loading status and audio URL
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -22,25 +21,6 @@ export default function GenerateSoundView() {
 
     try {
       // Make a POST request to the server's API endpoint to generate audio
-      const res = await fetch("/api/generate/eleven-labs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          input: request.text,
-        }),
-      });
-
-      const arrayBuffer = await res.arrayBuffer();
-      const blobUrl = new Blob([arrayBuffer], { type: "audio/mpeg" });
-      const url = URL.createObjectURL(blobUrl);
-
-      if (url != null) {
-        setAudioUrl(url);
-        setIsLoading(false);
-        return;
-      }
 
       const response = await fetch("/api/generate/hugging-face", {
         method: "POST",
@@ -71,27 +51,16 @@ export default function GenerateSoundView() {
   };
 
   return (
-    <div className="h-[100dvh] flex justify-center items-center">
-      <div className="container rounded-[10px] m-auto flex h-auto py-[40px] border border-slate-200">
-        <div className="w-full bg-white py-5 px-5 rounded-[10px] flex flex-col gap-[10px]">
-          <div className="mr-8 mt-4 mb-4 text-xl">
-            <h1>Преобразование текста в речь</h1>
-          </div>
+    <>
+      <HuggingFaceForm isLoading={isLoading} handleGetAudio={handleGetAudio} />
 
-          <GenerateSoundForm
-            isLoading={isLoading}
-            handleGetAudio={handleGetAudio}
-          />
-
-          <div>
-            {audioUrl && (
-              <audio controls className="w-full" autoPlay>
-                <source id="audioSource" type="audio/flac" src={audioUrl!} />
-              </audio>
-            )}
-          </div>
-        </div>
+      <div className="mt-4">
+        {audioUrl && (
+          <audio controls className="w-full" autoPlay>
+            <source id="audioSource" type="audio/flac" src={audioUrl!} />
+          </audio>
+        )}
       </div>
-    </div>
+    </>
   );
 }
