@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ElevenLabsForm } from "./components/eleven-labs-form";
+import { ElevenLabsParams } from "./lib/models";
 
 /**
  * The main view component for generating sound using a pre-trained model.
@@ -13,9 +14,9 @@ export default function ElevenLabsTTSView() {
 
   /**
    * Handles the process of fetching audio data using the provided request.
-   * @param {CreateSoundRequest} request - The request containing model URL and text.
+   * @param {ElevenLabsParams} request - The request containing model URL and text.
    */
-  const handleGetAudio = async (request: CreateSoundRequest) => {
+  const handleGetAudio = async (request: ElevenLabsParams) => {
     setIsLoading(true);
     setAudioUrl(null);
 
@@ -26,9 +27,7 @@ export default function ElevenLabsTTSView() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          input: request.text,
-        }),
+        body: JSON.stringify(request),
       });
 
       if (!response.ok) {

@@ -21,19 +21,15 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  SoundModel,
-  SOUND_MODELS,
-  LANGUAGES,
-  Languages,
-} from "../lib/constants";
 import { FormSchema, FormSchemaProps } from "../lib/form-schema";
+import { ElevenLabsParams, Voice } from "../lib/models";
+import { fetchVoices } from "../lib/_requests";
 
 // Define the validation schema for the form fields
 
 // Define the props interface for the ElevenLabsForm component
 interface ElevenLabsFormProps {
-  handleGetAudio: (data: CreateSoundRequest) => void;
+  handleGetAudio: (data: ElevenLabsParams) => void;
   isLoading?: boolean;
 }
 
@@ -44,7 +40,7 @@ export function ElevenLabsForm({
 }: ElevenLabsFormProps) {
   // State for tracking form submission status
   const [formSubmitting, setFormSubmitting] = useState<boolean>(false);
-  const [voices, setVoices] = useState([]);
+  const [voices, setVoices] = useState<Voice[]>([]);
 
   // Initialize the react-hook-form with the validation schema
   const form = useForm<FormSchemaProps>({
@@ -54,14 +50,8 @@ export function ElevenLabsForm({
   // Function to handle form submission
   function onSubmit(data: FormSchemaProps) {
     setFormSubmitting(true);
-    const soundModel = SOUND_MODELS.find(
-      (item) => item.value === data.soundModel
-    );
-    if (!soundModel) return;
-    const soundRequest: CreateSoundRequest = {
-      modelUrl: soundModel?.url,
-      text: data.text,
-    };
+
+    const soundRequest: ElevenLabsParams = data;
 
     // Call the provided handler function with the sound request
     handleGetAudio(soundRequest);
@@ -69,26 +59,8 @@ export function ElevenLabsForm({
     setFormSubmitting(false);
   }
 
-  const formLang = form.watch("language");
-
   useEffect(() => {
-    if (!formLang) return;
-    const SOUND_MODELS_FILTERED = !!formLang
-      ? SOUND_MODELS.filter((item) => item.value.includes(formLang))
-      : SOUND_MODELS;
-    setSoundsModels(SOUND_MODELS_FILTERED);
-  }, [formLang]);
-
-  const fetchVoices = async () => {
-    try {
-      const response = await fetch("/api/generate/eleven-labs/voices");
-      const voices = await response.json();
-      setVoices(voices);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    fetchVoices();
+    fetchVoices(setVoices);
   }, []);
 
   return (
@@ -99,10 +71,10 @@ export function ElevenLabsForm({
           {/* Form field for selecting the sound model */}
           <FormField
             control={form.control}
-            name="voiceId"
+            name="voice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Языки</FormLabel>
+                <FormLabel>Типы голос</FormLabel>
                 {/* Select component for choosing a sound model */}
                 <Select
                   onValueChange={field.onChange}
@@ -111,18 +83,16 @@ export function ElevenLabsForm({
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите язык" />
+                      <SelectValue placeholder="Выберите тип голоса" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {/* Map through available sound models */}
-                    {LANGUAGES.map(
-                      ({ value, name }: Languages, index: number) => (
-                        <SelectItem key={`${name}-${index}`} value={value}>
-                          {name}
-                        </SelectItem>
-                      )
-                    )}
+                    {voices.map(({ voice_id, name }: Voice, index: number) => (
+                      <SelectItem key={`${name}-${index}`} value={voice_id}>
+                        {name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 {/* <FormDescription>

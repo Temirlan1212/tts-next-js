@@ -2,9 +2,15 @@ export async function POST(request: Request): Promise<Response> {
   // Parse the JSON payload from the request body
   const requestBody = await request.json();
 
+  console.log(requestBody, "requestBody");
+
   // Check if the 'input' field is provided in the request body
-  if (!requestBody.input) {
-    throw new Error("Missing 'input' field in the request body");
+  if (!requestBody.text) {
+    throw new Error("Missing 'text' field in the request body");
+  }
+
+  if (!requestBody.voice) {
+    throw new Error("Missing 'voice' field in the request body");
   }
 
   // Check if the 'input' field is provided in the request body
@@ -17,10 +23,10 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   // Extract the 'modelUrl' and 'input' from the request body
-  const input = requestBody.input;
+  const { text, voice } = requestBody;
 
   const response = await fetch(
-    `${process.env.ELEVEN_LABS_URL}/v1/text-to-speech/pNInz6obpgDQGcFmaJgB`,
+    `${process.env.ELEVEN_LABS_URL}/v1/text-to-speech/${voice}`,
     {
       method: "POST",
       headers: {
@@ -29,7 +35,8 @@ export async function POST(request: Request): Promise<Response> {
         "xi-api-key": process.env.ELEVEN_LABS_TOKEN,
       },
       body: JSON.stringify({
-        text: input,
+        model_id: "eleven_multilingual_v2",
+        text: text,
         voice_settings: {
           stability: 0,
           similarity_boost: 0,
