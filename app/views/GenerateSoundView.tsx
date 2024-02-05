@@ -1,7 +1,7 @@
 "use client";
 
 import { GenerateSoundForm } from "@/components/GenerateSoundForm";
-import { AudioPlayer } from "@/components/ui/audio-player";
+import Loader from "@/components/Loader";
 import { useState } from "react";
 
 /**
@@ -22,7 +22,27 @@ export default function GenerateSoundView() {
 
     try {
       // Make a POST request to the server's API endpoint to generate audio
-      const response = await fetch("/api/generate", {
+      const res = await fetch("/api/generate/eleven-labs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          input: request.text,
+        }),
+      });
+
+      const arrayBuffer = await res.arrayBuffer();
+      const blobUrl = new Blob([arrayBuffer], { type: "audio/mpeg" });
+      const url = URL.createObjectURL(blobUrl);
+
+      if (url != null) {
+        setAudioUrl(url);
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await fetch("/api/generate/hugging-face", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,38 +70,9 @@ export default function GenerateSoundView() {
     }
   };
 
-  // return (
-  //   <div className="flex flex-col md:flex-row h-screen">
-  //     <div className="w-full md:w-1/3 p-4">
-  //       <div className="mr-8 mt-4 mb-4 text-xl">
-  //         <h1>Преобразование текста в речь</h1>
-  //       </div>
-  //       {/* Render the form component for generating sound */}
-  //       <GenerateSoundForm handleGetAudio={handleGetAudio} />
-  //     </div>
-  //     <div className="w-full md:w-2/3 p-4 bg-gray-200 h-screen">
-  //       <div className="h-full flex justify-center items-center">
-  //         {isLoading ? (
-  //           // Show loader when fetching audio data
-  //           <Loader />
-  //         ) : (
-  //           // Display audio player when audio is available
-  //           <>
-  //             {audioUrl && (
-  //               <audio controls>
-  //                 <source id="audioSource" type="audio/flac" src={audioUrl!} />
-  //               </audio>
-  //             )}
-  //           </>
-  //         )}
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-
   return (
-    <div className="bg-gray-200 h-[100dvh] flex justify-center items-center ">
-      <div className="container max-w-[900px] m-auto flex h-auto py-[40px]">
+    <div className="h-[100dvh] flex justify-center items-center">
+      <div className="container rounded-[10px] m-auto flex h-auto py-[40px] border border-slate-200">
         <div className="w-full bg-white py-5 px-5 rounded-[10px] flex flex-col gap-[10px]">
           <div className="mr-8 mt-4 mb-4 text-xl">
             <h1>Преобразование текста в речь</h1>
