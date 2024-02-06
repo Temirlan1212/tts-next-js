@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ElevenLabsForm } from "./components/eleven-labs-form";
 import { ElevenLabsParams } from "./lib/models";
+import { ElevenLabsSettingsDialog } from "./components/eleven-labs-settings-dialog";
 
 /**
  * The main view component for generating sound using a pre-trained model.
@@ -52,6 +53,10 @@ export default function ElevenLabsTTSView() {
 
   return (
     <>
+      <div className="absolute right-0 top-[-50px]">
+        <ElevenLabsSettingsDialog onSubmit={(v) => console.log(v)} />
+      </div>
+
       <ElevenLabsForm isLoading={isLoading} handleGetAudio={handleGetAudio} />
 
       <div className="mt-4">

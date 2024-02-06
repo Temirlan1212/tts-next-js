@@ -1,3 +1,5 @@
+import { SettingsFormSchemaProps } from "./form-schema";
+
 export type Voice = {
   voice_id: string;
   name: string;
@@ -36,3 +38,7 @@ export type ElevenLabsParams = {
   text: string;
   voice: string;
 };
+
+export interface ElevenLabsSettingsFormProps {
+  onSubmit: (data: SettingsFormSchemaProps) => void;
+}

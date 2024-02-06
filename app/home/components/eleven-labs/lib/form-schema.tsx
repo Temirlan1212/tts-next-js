@@ -11,3 +11,12 @@ export const FormSchema = z.object({
 });
 
 export type FormSchemaProps = z.infer<typeof FormSchema>;
+
+export const SettingsFormSchema = z.object({
+  similarity_boost: z.number(),
+  stability: z.number(),
+  style: z.number(),
+  use_speaker_boost: z.boolean().default(false),
+});
+
+export type SettingsFormSchemaProps = z.infer<typeof SettingsFormSchema>;
