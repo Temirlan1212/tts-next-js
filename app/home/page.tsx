@@ -24,7 +24,7 @@ export default function Home() {
 
   return (
     <div className="w-full flex flex-col gap-3">
-      <ModelCombox setTab={setTab} models={MODELS} />
+      <ModelCombox setTab={setTab} models={MODELS} defaultValue={tab} />
 
       <div className="w-full rounded-[10px] m-auto flex h-auto border border-slate-200">
         <div className="w-full bg-white py-5 px-5 rounded-[10px] flex flex-col gap-[10px]">

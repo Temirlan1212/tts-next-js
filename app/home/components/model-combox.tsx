@@ -17,14 +17,16 @@ import {
 import { useTab } from "@/hooks/useTab";
 
 export function ModelCombox({
+  defaultValue,
   setTab,
   models,
 }: {
+  defaultValue: string;
   setTab: Dispatch<SetStateAction<any>>;
   models: { label: string; value: string }[];
 }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue || "");
   const { handleBindTab } = useTab();
 
   return (
