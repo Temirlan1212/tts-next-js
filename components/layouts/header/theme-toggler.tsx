@@ -27,19 +27,19 @@ export function ThemeToggler() {
           active={theme === "light"}
           onClick={() => setTheme("light")}
         >
-          Light
+          Светлый
         </DropdownMenuItem>
         <DropdownMenuItem
           active={theme === "dark"}
           onClick={() => setTheme("dark")}
         >
-          Dark
+          Тёмный
         </DropdownMenuItem>
         <DropdownMenuItem
           active={theme === "system"}
           onClick={() => setTheme("system")}
         >
-          System
+          Системный
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
