@@ -2,9 +2,11 @@ export default function Footer() {
   return (
     <div className="border-t">
       <div className="container h-[5rem] flex items-center  justify-between">
-        <p>author</p>
+        <p>Автор</p>
         <a href="tel:+996 999 999 999">
-          <p>call</p>
+          <p>
+            Тел<div className=""></div>
+          </p>
         </a>
       </div>
     </div>
