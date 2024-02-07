@@ -21,13 +21,18 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { FormSchema, FormSchemaProps } from "../lib/form-schema";
+import {
+  FormSchema,
+  FormSchemaProps,
+  MAX_TEXT_LENGTH,
+} from "../lib/form-schema";
 import { ElevenLabsParams, Voice } from "../lib/models";
 import { fetchVoices } from "../lib/_requests";
 
 // Define the validation schema for the form fields
 
 // Define the props interface for the ElevenLabsForm component
+
 interface ElevenLabsFormProps {
   handleGetAudio: (data: ElevenLabsParams) => void;
   isLoading?: boolean;
@@ -122,6 +127,9 @@ export function ElevenLabsForm({
                 {/* <FormDescription>
                   Текст, используемый для преобразования в звук.
                 </FormDescription> */}
+                <p className="text-xs text-muted-foreground">
+                  {field.value?.length || 0} / {MAX_TEXT_LENGTH}
+                </p>
                 <FormMessage />
               </FormItem>
             )}

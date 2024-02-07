@@ -1,12 +1,19 @@
 import * as z from "zod";
 
+export const MAX_TEXT_LENGTH = 2500;
+
 export const FormSchema = z.object({
   voice: z.string({
     required_error: "Пожалуйста, выберите для использования звуковую модель",
   }),
-  text: z.string({
-    required_error: "Пожалуйста, выберите текст для используемой модели.",
-  }),
+  text: z
+    .string({
+      required_error: "Пожалуйста, выберите текст для используемой модели.",
+    })
+    .max(
+      MAX_TEXT_LENGTH,
+      `Максимальная длина текста не должно состовлять больше ${MAX_TEXT_LENGTH} символов!`
+    ),
   language: z.string().optional(),
 });
 

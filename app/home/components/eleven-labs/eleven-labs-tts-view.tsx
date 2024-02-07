@@ -41,12 +41,7 @@ export default function ElevenLabsTTSView() {
       const blobUrl = new Blob([arrayBuffer], { type: "audio/mpeg" });
       const url = URL.createObjectURL(blobUrl);
 
-      if (url != null) {
-        setAudioUrl(url);
-        setIsLoading(false);
-        return;
-      }
-
+      if (url != null) setAudioUrl(url);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
