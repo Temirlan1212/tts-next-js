@@ -11,12 +11,12 @@ import useAudioTest from "@/stores/audio";
 
 const MODELS = [
   {
-    value: "hugging-face",
-    label: "Hugging-face",
-  },
-  {
     value: "eleven-labs",
     label: "Eleven-labs",
+  },
+  {
+    value: "hugging-face",
+    label: "Hugging-face",
   },
 ];
 
