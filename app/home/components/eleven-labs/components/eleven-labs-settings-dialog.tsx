@@ -13,7 +13,7 @@ import { useState } from "react";
 
 export function ElevenLabsSettingsDialog({
   onSubmit,
-}: ElevenLabsSettingsFormProps) {
+}: Partial<ElevenLabsSettingsFormProps>) {
   const [open, setOpen] = useState(false);
   const handleSubmit: ElevenLabsSettingsFormProps["onSubmit"] = (data) => {
     onSubmit && onSubmit(data);

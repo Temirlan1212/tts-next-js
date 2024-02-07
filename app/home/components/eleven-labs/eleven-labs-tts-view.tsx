@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ElevenLabsForm } from "./components/eleven-labs-form";
 import { ElevenLabsParams } from "./lib/models";
 import { ElevenLabsSettingsDialog } from "./components/eleven-labs-settings-dialog";
+import useElevenLabs from "./lib/_store";
 
 /**
  * The main view component for generating sound using a pre-trained model.
@@ -12,6 +13,7 @@ export default function ElevenLabsTTSView() {
   // State to manage loading status and audio URL
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const voice_settings = useElevenLabs().voice_settings;
 
   /**
    * Handles the process of fetching audio data using the provided request.
@@ -28,7 +30,7 @@ export default function ElevenLabsTTSView() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(request),
+        body: JSON.stringify({ ...request, voice_settings }),
       });
 
       if (!response.ok) {
@@ -54,7 +56,7 @@ export default function ElevenLabsTTSView() {
   return (
     <>
       <div className="absolute right-0 top-[-50px]">
-        <ElevenLabsSettingsDialog onSubmit={(v) => console.log(v)} />
+        <ElevenLabsSettingsDialog />
       </div>
 
       <ElevenLabsForm isLoading={isLoading} handleGetAudio={handleGetAudio} />

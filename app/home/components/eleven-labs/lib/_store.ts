@@ -3,18 +3,18 @@ import { persist } from "zustand/middleware";
 import { SettingsFormSchemaProps } from "./form-schema";
 
 interface ElevenLabs {
-  settingsValues: SettingsFormSchemaProps;
+  voice_settings: SettingsFormSchemaProps;
   setValue: (field: keyof ElevenLabs, value: any) => void;
 }
 
 const useElevenLabs = create<ElevenLabs>()(
   persist(
     (set, get) => ({
-      settingsValues: {
-        similarity_boost: 10,
-        stability: 10,
-        style: 20,
-        use_speaker_boost: true,
+      voice_settings: {
+        stability: 0.4,
+        similarity_boost: 0.1,
+        style: 0,
+        use_speaker_boost: false,
       },
       setValue: (key, value) => set({ ...get(), [key]: value }),
     }),

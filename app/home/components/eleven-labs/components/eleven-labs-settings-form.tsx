@@ -26,26 +26,26 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 // Main component function
 
-const MAX_SLIDER_VALUE = 123;
+const MAX_SLIDER_VALUE = 1;
 const MIN_SLIDER_VALUE = 0;
-const STEP_SLIDER = 1;
+const STEP_SLIDER = 0.01;
 
 export function EleventLabsSettingsForm({
   onSubmit: onSubmitEvent,
 }: ElevenLabsSettingsFormProps) {
   // State for tracking form submission status
-  const { setValue, settingsValues } = useElevenLabs();
+  const { setValue, voice_settings } = useElevenLabs();
 
   // Initialize the react-hook-form with the validation schema
   const form = useForm<SettingsFormSchemaProps>({
     resolver: zodResolver(SettingsFormSchema),
-    values: settingsValues,
+    values: voice_settings,
   });
 
   // Function to handle form submission
   function onSubmit(data: SettingsFormSchemaProps) {
     onSubmitEvent(data);
-    setValue("settingsValues", data);
+    setValue("voice_settings", data);
   }
 
   return (

@@ -13,6 +13,10 @@ export async function POST(request: Request): Promise<Response> {
     throw new Error("Missing 'voice' field in the request body");
   }
 
+  if (!requestBody.voice_settings) {
+    throw new Error("Missing 'voice_settings' field in the request body");
+  }
+
   // Check if the 'input' field is provided in the request body
   if (!process.env.ELEVEN_LABS_TOKEN) {
     throw new Error("Missing 'Eleven Labs Access Token'");
@@ -23,7 +27,7 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   // Extract the 'modelUrl' and 'input' from the request body
-  const { text, voice } = requestBody;
+  const { text, voice, voice_settings } = requestBody;
 
   const response = await fetch(
     `${process.env.ELEVEN_LABS_URL}/v1/text-to-speech/${voice}`,
@@ -36,11 +40,8 @@ export async function POST(request: Request): Promise<Response> {
       },
       body: JSON.stringify({
         model_id: "eleven_multilingual_v2",
-        text: text,
-        voice_settings: {
-          stability: 0,
-          similarity_boost: 0,
-        },
+        text,
+        voice_settings,
       }),
     }
   );
