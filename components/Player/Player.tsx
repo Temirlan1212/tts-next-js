@@ -118,7 +118,7 @@ export const Player = () => {
   return (
     <div className="fixed w-screen bottom-0 border inset-x-0">
       <div className="py-5 backdrop-blur-xl shadow-lg shadow-purple-50">
-        <div className="container flex justify-between">
+        <div className="container flex justify-between flex-wrap gap-5">
           {/* title and thumbnail */}
           <div className="flex items-center lg:w-3/12 gap-2">
             <div className="flex flex-col gap-1">
