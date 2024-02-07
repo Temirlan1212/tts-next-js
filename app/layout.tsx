@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "h-[100vh] flex flex-col")}>
+      <body className={cn(inter.className, "h-[100dvh] flex flex-col")}>
         <NextThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
           <div className="grow flex items-center">{children}</div>
