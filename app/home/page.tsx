@@ -6,6 +6,8 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useTab } from "@/hooks/useTab";
 import { useState } from "react";
 import { ModelCombox } from "./components/model-combox";
+import { PlayGround, Player } from "@/components/Player";
+import useAudioTest from "@/stores/audio";
 
 const MODELS = [
   {
@@ -20,6 +22,7 @@ const MODELS = [
 
 export default function Home() {
   const { handleBindTab, tabDefaultValue } = useTab();
+  const currentAudioSrc = useAudioTest().currentAudio.src;
   const [tab, setTab] = useState(tabDefaultValue(MODELS[0].value));
 
   return (
@@ -41,6 +44,9 @@ export default function Home() {
           </Tabs>
         </div>
       </div>
+      {/* <PlayGround /> */}
+
+      {currentAudioSrc && <Player />}
     </div>
   );
 }

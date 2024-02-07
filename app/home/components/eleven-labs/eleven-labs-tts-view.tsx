@@ -5,6 +5,7 @@ import { ElevenLabsForm } from "./components/eleven-labs-form";
 import { ElevenLabsParams } from "./lib/models";
 import { ElevenLabsSettingsDialog } from "./components/eleven-labs-settings-dialog";
 import useElevenLabs from "./lib/_store";
+import useAudio from "@/stores/audio";
 
 /**
  * The main view component for generating sound using a pre-trained model.
@@ -14,6 +15,7 @@ export default function ElevenLabsTTSView() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const voice_settings = useElevenLabs().voice_settings;
+  const { setCurrentAudio } = useAudio();
 
   /**
    * Handles the process of fetching audio data using the provided request.
@@ -41,7 +43,13 @@ export default function ElevenLabsTTSView() {
       const blobUrl = new Blob([arrayBuffer], { type: "audio/mpeg" });
       const url = URL.createObjectURL(blobUrl);
 
-      if (url != null) setAudioUrl(url);
+      if (url != null) {
+        setAudioUrl(url);
+        setCurrentAudio(
+          { src: url, text: request.text },
+          { persistToHistory: true }
+        );
+      }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -55,14 +63,6 @@ export default function ElevenLabsTTSView() {
       </div>
 
       <ElevenLabsForm isLoading={isLoading} handleGetAudio={handleGetAudio} />
-
-      <div className="mt-4">
-        {audioUrl && (
-          <audio controls className="w-full" autoPlay>
-            <source id="audioSource" type="audio/flac" src={audioUrl!} />
-          </audio>
-        )}
-      </div>
     </>
   );
 }

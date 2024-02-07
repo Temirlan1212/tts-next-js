@@ -91,13 +91,15 @@ export function ElevenLabsForm({
                       <SelectValue placeholder="Выберите тип голоса" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="max-h-[400px]">
                     {/* Map through available sound models */}
-                    {voices.map(({ voice_id, name }: Voice, index: number) => (
-                      <SelectItem key={`${name}-${index}`} value={voice_id}>
-                        {name}
-                      </SelectItem>
-                    ))}
+                    {voices.map(
+                      ({ voice_id, name, labels }: Voice, index: number) => (
+                        <SelectItem key={`${name}-${index}`} value={voice_id}>
+                          <Option labels={labels} value={name} />
+                        </SelectItem>
+                      )
+                    )}
                   </SelectContent>
                 </Select>
                 {/* <FormDescription>
@@ -140,6 +142,31 @@ export function ElevenLabsForm({
           </Button>
         </form>
       </Form>
+    </div>
+  );
+}
+
+export function Option({
+  labels,
+  value,
+}: {
+  labels: Voice["labels"];
+  value: string;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span>{value}</span>
+      <div className="flex items-center gap-1">
+        <div className="py-[2px] px-[10px] rounded-full bg-blue-200">
+          {labels.accent}
+        </div>
+        <div className="py-[2px] px-[10px] rounded-full bg-pink-200">
+          {labels.age}
+        </div>
+        <div className="py-[2px] px-[10px] rounded-full bg-green-200">
+          {labels.gender}
+        </div>
+      </div>
     </div>
   );
 }

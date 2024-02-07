@@ -1,0 +1,82 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { v4 } from "uuid";
+
+const defaultAudio: CurrentAudioProps = {
+  id: v4(),
+  src: "",
+  text: "",
+  date: "",
+  isPlaying: false,
+};
+
+export type AudioType = {
+  id: string;
+  text: string;
+  src: string;
+  date?: string;
+};
+
+export interface CurrentAudioProps extends AudioType {
+  duration?: number;
+  curTime?: number;
+  isPlaying?: boolean;
+}
+
+interface Audio {
+  audioList: AudioType[];
+  currentAudio: CurrentAudioProps;
+  setCurrentAudio: (
+    cm: Partial<CurrentAudioProps>,
+    options?: { replace?: boolean; persistToHistory?: boolean }
+  ) => void;
+}
+
+const useAudio = create<Audio>()(
+  persist(
+    (set, get) => ({
+      audioList: [],
+      currentAudio: defaultAudio,
+      setCurrentAudio: (value: Partial<CurrentAudioProps>, options) => {
+        let newValue: CurrentAudioProps = {
+          ...(value as CurrentAudioProps),
+          date: new Date().toISOString(),
+          id: v4(),
+        };
+
+        if (options?.replace && newValue.src !== get().currentAudio.src) {
+          set({ currentAudio: newValue });
+        } else {
+          set({ currentAudio: { ...get().currentAudio, ...newValue } });
+        }
+
+        const handleHistoryPersist = (value: CurrentAudioProps) => {
+          const { audioList } = get();
+          const found = audioList.find((item) => item.text === value.text);
+          if (found) {
+            set({
+              audioList: get().audioList.map((item) => {
+                if (item.text === value.text) {
+                  return value;
+                } else {
+                  return item;
+                }
+              }),
+            });
+          }
+
+          if (!found) {
+            set({ audioList: [...get().audioList, value] });
+          }
+        };
+
+        if (options?.persistToHistory) handleHistoryPersist(get().currentAudio);
+      },
+    }),
+    {
+      name: "audio",
+    }
+  )
+);
+
+export default useAudio;
