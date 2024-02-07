@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Footer from "@/components/layouts/footer/footer";
 import { cn } from "@/lib/utils";
+import { NextThemeProvider } from "@/components/providers/next-theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, "h-[100vh] flex flex-col")}>
-        <Header />
-        <div className="grow flex items-center">{children}</div>
-        <Footer />
+        <NextThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Header />
+          <div className="grow flex items-center">{children}</div>
+          <Footer />
+        </NextThemeProvider>
       </body>
     </html>
   );
