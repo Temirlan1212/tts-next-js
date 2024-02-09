@@ -36,10 +36,10 @@ export default function Home() {
             onValueChange={(v) => handleBindTab({ value: v, callback: setTab })}
           >
             <TabsContent value={MODELS[0].value}>
-              <HuggingFaceTTSView />
+              <ElevenLabsTTSView />
             </TabsContent>
             <TabsContent value={MODELS[1].value}>
-              <ElevenLabsTTSView />
+              <HuggingFaceTTSView />
             </TabsContent>
           </Tabs>
         </div>

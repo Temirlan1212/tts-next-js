@@ -182,7 +182,7 @@ export const Player = () => {
 
             <div className="flex justify-between text-xs">
               <span>{secondsToMinutes(currentAudio.curTime)}</span>
-              <span>{secondsToMinutes(currentAudio.duration)}</span>
+              <span>{secondsToMinutes(currentAudio?.duration || 1)}</span>
             </div>
           </div>
           {/* settings */}
