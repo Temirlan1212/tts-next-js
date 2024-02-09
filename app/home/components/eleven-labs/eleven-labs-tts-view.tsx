@@ -44,16 +44,6 @@ export default function ElevenLabsTTSView() {
         );
       }
 
-      // const arrayBuffer = await response.arrayBuffer();
-      // const blobUrl = new Blob([arrayBuffer], { type: "audio/mpeg" });
-      // const url = URL.createObjectURL(blobUrl);
-
-      // if (url != null) {
-      //   setCurrentAudio(
-      //     { src: url, text: request.text },
-      //     { persistToHistory: true }
-      //   );
-      // }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -62,7 +52,7 @@ export default function ElevenLabsTTSView() {
 
   return (
     <>
-      <div className="absolute right-0 top-[-50px]">
+      <div className="absolute right-[6px] top-[6px]">
         <ElevenLabsSettingsDialog />
       </div>
 

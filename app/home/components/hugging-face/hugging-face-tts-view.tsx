@@ -10,7 +10,6 @@ import useAudio from "@/stores/audio";
 export default function HuggingFaceTTSView() {
   // State to manage loading status and audio URL
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const { setCurrentAudio } = useAudio();
 
   /**
@@ -19,7 +18,6 @@ export default function HuggingFaceTTSView() {
    */
   const handleGetAudio = async (request: CreateSoundRequest) => {
     setIsLoading(true);
-    setAudioUrl(null);
 
     try {
       // Make a POST request to the server's API endpoint to generate audio
@@ -47,13 +45,6 @@ export default function HuggingFaceTTSView() {
         );
       }
 
-      // Get the audio data as an ArrayBuffer
-      // const data = await response.arrayBuffer();
-
-      // // Convert ArrayBuffer to Blob and create a URL for the audio
-      // const blob = new Blob([data], { type: "audio/mpeg" });
-      // const audioUrl = URL.createObjectURL(blob);
-      // setAudioUrl(audioUrl);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -63,14 +54,6 @@ export default function HuggingFaceTTSView() {
   return (
     <>
       <HuggingFaceForm isLoading={isLoading} handleGetAudio={handleGetAudio} />
-
-      <div className="mt-4">
-        {audioUrl && (
-          <audio controls className="w-full" autoPlay>
-            <source id="audioSource" type="audio/flac" src={audioUrl!} />
-          </audio>
-        )}
-      </div>
     </>
   );
 }

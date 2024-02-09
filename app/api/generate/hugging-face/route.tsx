@@ -46,14 +46,4 @@ export async function POST(request: Request): Promise<Response> {
   const base64 = Buffer.from(arrayBuffer).toString("base64");
 
   return new Response(base64);
-
-  // // Get the generated audio data as an ArrayBuffer
-  // const audioData = await response.arrayBuffer();
-
-  // // Create an HTTP response with the generated audio data
-  // return new Response(audioData, {
-  //   headers: {
-  //     "Content-Type": "audio/mpeg", // Adjust the content type based on the actual audio format
-  //   },
-  // });
 }
