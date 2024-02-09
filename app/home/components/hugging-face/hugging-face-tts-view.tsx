@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { HuggingFaceForm } from "./components/hugging-face-form";
+import useAudio from "@/stores/audio";
 
 /**
  * The main view component for generating sound using a pre-trained model.
@@ -10,6 +11,7 @@ export default function HuggingFaceTTSView() {
   // State to manage loading status and audio URL
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const { setCurrentAudio } = useAudio();
 
   /**
    * Handles the process of fetching audio data using the provided request.
@@ -37,13 +39,21 @@ export default function HuggingFaceTTSView() {
         throw new Error("Failed to fetch audio data.");
       }
 
-      // Get the audio data as an ArrayBuffer
-      const data = await response.arrayBuffer();
+      const base64 = await response.text();
+      if (base64 != null) {
+        setCurrentAudio(
+          { src: `data:audio/wav;base64,${base64}`, text: request.text },
+          { persistToHistory: true }
+        );
+      }
 
-      // Convert ArrayBuffer to Blob and create a URL for the audio
-      const blob = new Blob([data], { type: "audio/mpeg" });
-      const audioUrl = URL.createObjectURL(blob);
-      setAudioUrl(audioUrl);
+      // Get the audio data as an ArrayBuffer
+      // const data = await response.arrayBuffer();
+
+      // // Convert ArrayBuffer to Blob and create a URL for the audio
+      // const blob = new Blob([data], { type: "audio/mpeg" });
+      // const audioUrl = URL.createObjectURL(blob);
+      // setAudioUrl(audioUrl);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

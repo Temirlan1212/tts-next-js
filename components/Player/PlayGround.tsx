@@ -1,4 +1,5 @@
-import useAudioTest, { AudioType } from "@/stores/audio";
+import { AudioType } from "@/models/audio";
+import useAudioTest from "@/stores/audio";
 import { TbPlayerPause, TbPlayerPlay } from "react-icons/tb";
 
 export const PlayGround = () => {

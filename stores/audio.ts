@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { v4 } from "uuid";
+import { AudioType, CurrentAudioProps } from "@/models/audio";
 
 const defaultAudio: CurrentAudioProps = {
   id: v4(),
@@ -9,19 +10,6 @@ const defaultAudio: CurrentAudioProps = {
   date: "",
   isPlaying: false,
 };
-
-export type AudioType = {
-  id: string;
-  text: string;
-  src: string;
-  date?: string;
-};
-
-export interface CurrentAudioProps extends AudioType {
-  duration?: number;
-  curTime?: number;
-  isPlaying?: boolean;
-}
 
 interface Audio {
   audioList: AudioType[];

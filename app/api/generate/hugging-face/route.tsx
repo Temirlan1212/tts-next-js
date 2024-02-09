@@ -37,18 +37,23 @@ export async function POST(request: Request): Promise<Response> {
     body: JSON.stringify({ inputs: input }),
   });
 
-  // Get the generated audio data as an ArrayBuffer
-  const audioData = await response.arrayBuffer();
-
   // Check if the HTTP response is not successful
   if (!response.ok) {
     throw new Error("Request failed");
   }
 
-  // Create an HTTP response with the generated audio data
-  return new Response(audioData, {
-    headers: {
-      "Content-Type": "audio/mpeg", // Adjust the content type based on the actual audio format
-    },
-  });
+  const arrayBuffer = await response.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
+
+  return new Response(base64);
+
+  // // Get the generated audio data as an ArrayBuffer
+  // const audioData = await response.arrayBuffer();
+
+  // // Create an HTTP response with the generated audio data
+  // return new Response(audioData, {
+  //   headers: {
+  //     "Content-Type": "audio/mpeg", // Adjust the content type based on the actual audio format
+  //   },
+  // });
 }

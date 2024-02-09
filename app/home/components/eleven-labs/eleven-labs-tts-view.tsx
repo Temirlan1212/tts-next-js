@@ -13,7 +13,6 @@ import useAudio from "@/stores/audio";
 export default function ElevenLabsTTSView() {
   // State to manage loading status and audio URL
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const voice_settings = useElevenLabs().voice_settings;
   const { setCurrentAudio } = useAudio();
 
@@ -23,7 +22,6 @@ export default function ElevenLabsTTSView() {
    */
   const handleGetAudio = async (request: ElevenLabsParams) => {
     setIsLoading(true);
-    setAudioUrl(null);
 
     try {
       // Make a POST request to the server's API endpoint to generate audio
@@ -38,18 +36,24 @@ export default function ElevenLabsTTSView() {
       if (!response.ok) {
         throw new Error("Failed to fetch audio data.");
       }
-
-      const arrayBuffer = await response.arrayBuffer();
-      const blobUrl = new Blob([arrayBuffer], { type: "audio/mpeg" });
-      const url = URL.createObjectURL(blobUrl);
-
-      if (url != null) {
-        setAudioUrl(url);
+      const base64 = await response.text();
+      if (base64 != null) {
         setCurrentAudio(
-          { src: url, text: request.text },
+          { src: `data:audio/wav;base64,${base64}`, text: request.text },
           { persistToHistory: true }
         );
       }
+
+      // const arrayBuffer = await response.arrayBuffer();
+      // const blobUrl = new Blob([arrayBuffer], { type: "audio/mpeg" });
+      // const url = URL.createObjectURL(blobUrl);
+
+      // if (url != null) {
+      //   setCurrentAudio(
+      //     { src: url, text: request.text },
+      //     { persistToHistory: true }
+      //   );
+      // }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

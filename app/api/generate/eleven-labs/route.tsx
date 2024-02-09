@@ -2,8 +2,6 @@ export async function POST(request: Request): Promise<Response> {
   // Parse the JSON payload from the request body
   const requestBody = await request.json();
 
-  console.log(requestBody, "requestBody");
-
   // Check if the 'input' field is provided in the request body
   if (!requestBody.text) {
     throw new Error("Missing 'text' field in the request body");
@@ -51,10 +49,15 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const arrayBuffer = await response.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
 
-  return new Response(arrayBuffer, {
-    headers: {
-      "Content-Type": "audio/mpeg", // Adjust the content type based on the actual audio format
-    },
-  });
+  return new Response(base64);
+
+  // const arrayBuffer = await response.arrayBuffer();
+
+  // return new Response(arrayBuffer, {
+  //   headers: {
+  //     "Content-Type": "audio/mpeg", // Adjust the content type based on the actual audio format
+  //   },
+  // });
 }
