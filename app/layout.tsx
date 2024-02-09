@@ -24,7 +24,7 @@ export default function RootLayout({
         <NextThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
           <div className="grow flex items-center">{children}</div>
-          <Footer />
+          {/* <Footer /> */}
         </NextThemeProvider>
       </body>
     </html>

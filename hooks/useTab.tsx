@@ -19,9 +19,5 @@ export const useTab = () => {
     router.push(`#${value}`);
   };
 
-  const tabDefaultValue = (value: string) => {
-    return window?.location?.hash.replace("#", "") || value;
-  };
-
-  return { handleBindTab, tabDefaultValue, setTab };
+  return { handleBindTab, setTab };
 };

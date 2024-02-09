@@ -4,7 +4,7 @@ import ElevenLabsTTSView from "./components/eleven-labs/eleven-labs-tts-view";
 import HuggingFaceTTSView from "./components/hugging-face/hugging-face-tts-view";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useTab } from "@/hooks/useTab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ModelCombox } from "./components/model-combox";
 import { PlayGround, Player } from "@/components/Player";
 import useAudioTest from "@/stores/audio";
@@ -21,9 +21,14 @@ const MODELS = [
 ];
 
 export default function Home() {
-  const { handleBindTab, tabDefaultValue } = useTab();
+  const { handleBindTab } = useTab();
   const currentAudioSrc = useAudioTest().currentAudio.src;
-  const [tab, setTab] = useState(tabDefaultValue(MODELS[0].value));
+  const [tab, setTab] = useState(MODELS[0].value);
+
+  useEffect(() => {
+    const hash = window?.location?.hash.replace("#", "");
+    if (hash) setTab(hash);
+  }, []);
 
   return (
     <div className="w-full flex flex-col gap-3">

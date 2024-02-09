@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useState } from "react";
+"use client";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,8 +27,12 @@ export function ModelCombox({
   models: { label: string; value: string }[];
 }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(defaultValue || "");
+  const [value, setValue] = useState("");
   const { handleBindTab } = useTab();
+
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
