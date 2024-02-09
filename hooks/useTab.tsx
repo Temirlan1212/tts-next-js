@@ -20,7 +20,7 @@ export const useTab = () => {
   };
 
   const tabDefaultValue = (value: string) => {
-    return window.location.hash.replace("#", "") || value;
+    return window?.location?.hash.replace("#", "") || value;
   };
 
   return { handleBindTab, tabDefaultValue, setTab };
