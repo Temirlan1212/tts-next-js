@@ -12,19 +12,23 @@ const defaultAudio: CurrentAudioProps = {
 };
 
 interface Audio {
+  isPlayerOpen: boolean;
   audioList: AudioType[];
   currentAudio: CurrentAudioProps;
   setCurrentAudio: (
     cm: Partial<CurrentAudioProps>,
     options?: { replace?: boolean; persistToHistory?: boolean }
   ) => void;
+  setPlayer: (v: boolean) => void;
 }
 
 const useAudio = create<Audio>()(
   persist(
     (set, get) => ({
+      isPlayerOpen: false,
       audioList: [],
       currentAudio: defaultAudio,
+      setPlayer: (v) => set({ isPlayerOpen: v }),
       setCurrentAudio: (value: Partial<CurrentAudioProps>, options) => {
         let newValue: CurrentAudioProps = {
           ...(value as CurrentAudioProps),

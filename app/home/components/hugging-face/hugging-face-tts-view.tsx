@@ -10,7 +10,7 @@ import useAudio from "@/stores/audio";
 export default function HuggingFaceTTSView() {
   // State to manage loading status and audio URL
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { setCurrentAudio } = useAudio();
+  const { setCurrentAudio, setPlayer } = useAudio();
 
   /**
    * Handles the process of fetching audio data using the provided request.
@@ -39,6 +39,7 @@ export default function HuggingFaceTTSView() {
 
       const base64 = await response.text();
       if (base64 != null) {
+        setPlayer(true);
         setCurrentAudio(
           { src: `data:audio/wav;base64,${base64}`, text: request.text },
           { persistToHistory: true }
