@@ -8,7 +8,7 @@ export interface IUserCredentials extends IUser {
 }
 
 export interface IUserRole {
-  id: string;
+  _id: string;
   name: "admin" | "user";
 }
 

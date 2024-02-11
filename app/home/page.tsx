@@ -6,7 +6,10 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useTab } from "@/hooks/useTab";
 import { useEffect, useState } from "react";
 import { ModelCombox } from "./components/model-combox";
-import { PlayerWrapper } from "@/components/Player";
+import { Player, PlayerWrapper } from "@/components/Player";
+import { useSession } from "next-auth/react";
+import { AudioListSheet } from "./components/audio-list/audio-list-sheet";
+import useAudio from "@/stores/audio";
 
 const MODELS = [
   {
@@ -22,15 +25,21 @@ const MODELS = [
 export default function Home() {
   const { handleBindTab } = useTab();
   const [tab, setTab] = useState(MODELS[0].value);
+  const session = useSession().data;
+  const audio_store = useAudio();
 
   useEffect(() => {
     const hash = window?.location?.hash.replace("#", "");
     if (hash) setTab(hash);
-  }, []);
+    // fetchVoices(session?.user?.role?._id);
+  }, [session]);
 
   return (
     <div className="w-full flex flex-col gap-3">
-      <ModelCombox setTab={setTab} models={MODELS} defaultValue={tab} />
+      <div className="flex items-center gap-3 justify-between">
+        <ModelCombox setTab={setTab} models={MODELS} defaultValue={tab} />
+        <AudioListSheet />
+      </div>
 
       <div className="w-full rounded-[10px] m-auto flex h-auto border relative">
         <div className="w-full py-5 px-5 rounded-[10px] flex flex-col gap-[10px]">
@@ -47,9 +56,13 @@ export default function Home() {
           </Tabs>
         </div>
       </div>
+
       {/* <PlayGround /> */}
 
-      <PlayerWrapper />
+      <PlayerWrapper
+        {...audio_store}
+        slots={{ Player: <Player type={"desktop"} {...audio_store} /> }}
+      />
     </div>
   );
 }

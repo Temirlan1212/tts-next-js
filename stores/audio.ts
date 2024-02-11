@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { v4 } from "uuid";
-import { AudioType, CurrentAudioProps } from "@/models/audio";
+import { AudioStoreType, CurrentAudioProps } from "@/models/audio";
 
 const defaultAudio: CurrentAudioProps = {
   id: v4(),
@@ -11,18 +11,7 @@ const defaultAudio: CurrentAudioProps = {
   isPlaying: false,
 };
 
-interface Audio {
-  isPlayerOpen: boolean;
-  audioList: AudioType[];
-  currentAudio: CurrentAudioProps;
-  setCurrentAudio: (
-    cm: Partial<CurrentAudioProps>,
-    options?: { replace?: boolean; persistToHistory?: boolean }
-  ) => void;
-  setPlayer: (v: boolean) => void;
-}
-
-const useAudio = create<Audio>()(
+const useAudio = create<AudioStoreType>()(
   persist(
     (set, get) => ({
       isPlayerOpen: false,

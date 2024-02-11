@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { HuggingFaceForm } from "./components/hugging-face-form";
 import useAudio from "@/stores/audio";
+import { useSession } from "next-auth/react";
+import { saveUserAudio } from "../../_requests";
 
 /**
  * The main view component for generating sound using a pre-trained model.
@@ -11,7 +13,7 @@ export default function HuggingFaceTTSView() {
   // State to manage loading status and audio URL
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setCurrentAudio, setPlayer } = useAudio();
-
+  const { data: session, status } = useSession();
   /**
    * Handles the process of fetching audio data using the provided request.
    * @param {CreateSoundRequest} request - The request containing model URL and text.
@@ -39,14 +41,25 @@ export default function HuggingFaceTTSView() {
 
       const base64 = await response.text();
       if (base64 != null) {
+        const base64audio = `data:audio/wav;base64,${base64}`;
         setPlayer(true);
         setCurrentAudio(
-          { src: `data:audio/wav;base64,${base64}`, text: request.text },
+          { src: base64audio, text: request.text },
           { persistToHistory: true }
         );
-      }
 
-      setIsLoading(false);
+        setIsLoading(false);
+
+        if (status === "authenticated" && session.user?.role?._id) {
+          if (request.text) {
+            await saveUserAudio({
+              src: base64audio,
+              text: request.text,
+              user_id: session.user?.role?._id,
+            });
+          }
+        }
+      }
     } catch (error) {
       setIsLoading(false);
     }

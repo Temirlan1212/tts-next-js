@@ -1,18 +1,34 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 import useAudioTest from "@/stores/audio";
-import { Player } from "./Player";
 import { ChevronDown, Play } from "lucide-react";
 import { Button } from "../ui/button";
+import { AudioStoreType } from "@/models/audio";
 
-export interface PlayerWrapperProps extends React.HTMLAttributes<HTMLElement> {}
+export interface PlayerWrapperProps extends React.HTMLAttributes<HTMLElement> {
+  slots: {
+    Player: React.ReactNode;
+  };
+  showCloseIcon?: boolean;
+}
 
-export const PlayerWrapper = React.forwardRef<HTMLElement, PlayerWrapperProps>(
-  ({ className, ...props }, ref) => {
-    const currentAudioSrc = useAudioTest().currentAudio.src;
-    const currentAudioText = useAudioTest().currentAudio.text;
-    const isPlayerOpen = useAudioTest().isPlayerOpen;
-    const setPlayer = useAudioTest().setPlayer;
+export const PlayerWrapper = React.forwardRef<
+  HTMLElement,
+  PlayerWrapperProps & AudioStoreType
+>(
+  (
+    {
+      className,
+      currentAudio,
+      isPlayerOpen,
+      showCloseIcon = true,
+      setPlayer,
+      ...props
+    },
+    ref
+  ) => {
+    const currentAudioSrc = currentAudio.src;
+    const currentAudioText = currentAudio.text;
 
     let content = null;
 
@@ -20,17 +36,19 @@ export const PlayerWrapper = React.forwardRef<HTMLElement, PlayerWrapperProps>(
       if (isPlayerOpen) {
         content = (
           <div className={"h-full border-t"}>
-            <Player />
-            <Button
-              onClick={() => setPlayer(false)}
-              variant="ghost"
-              className="absolute top-[-38px] right-[10px] py-[0px] px-[10px] rounded-[5px] border-t border-x"
-            >
-              <ChevronDown />
-            </Button>
+            {props.slots.Player}
+            {showCloseIcon && (
+              <Button
+                onClick={() => setPlayer(false)}
+                variant="ghost"
+                className="absolute top-[-38px] right-[10px] py-[0px] px-[10px] rounded-[5px] border-t border-x bg-background"
+              >
+                <ChevronDown />
+              </Button>
+            )}
           </div>
         );
-      } else {
+      } else if (showCloseIcon) {
         content = (
           <div className="w-full flex justify-end">
             <div className="flex flex-col m-4 items-center gap-[5px]">
@@ -52,7 +70,7 @@ export const PlayerWrapper = React.forwardRef<HTMLElement, PlayerWrapperProps>(
 
     return (
       <div
-        className={cn("fixed w-screen bottom-0 inset-x-0", className)}
+        className={cn("fixed w-screen bottom-0 left-0 right-0", className)}
         {...props}
       >
         {content}

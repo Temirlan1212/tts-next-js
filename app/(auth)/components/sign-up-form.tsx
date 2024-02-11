@@ -74,7 +74,7 @@ export function SignUpForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="p-[10px]">
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Create an account</CardTitle>
+              <CardTitle className="text-2xl">Создать учетную запись</CardTitle>
               <CardDescription>
                 Введите свой адрес электронной почты, имя и пароль ниже, чтобы
                 создать свою учетную запись

@@ -12,10 +12,20 @@ import {
 import { secondsToMinutes } from "./utils";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import useAudio from "@/stores/audio";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { AudioStoreType } from "@/models/audio";
 
-export const Player = () => {
+export type PlayerType = {
+  type: "mobile" | "desktop";
+} & AudioStoreType;
+
+export const Player = ({
+  type = "desktop",
+  setCurrentAudio,
+  audioList: playList,
+  currentAudio,
+}: PlayerType) => {
   const [isRandom, setIsRandom] = useState(false);
   const [isVolumeOpen, setIsVolumeOpen] = useState(false);
 
@@ -35,8 +45,6 @@ export const Player = () => {
   }, []);
 
   const audioRef = useRef<HTMLAudioElement>();
-
-  const { currentAudio, setCurrentAudio, audioList: playList } = useAudio();
 
   useEffect(() => {
     audioRef.current = new Audio(currentAudio.src);
@@ -117,9 +125,19 @@ export const Player = () => {
 
   return (
     <div className="py-[25px] backdrop-blur-xl shadow-lg shadow-purple-50">
-      <div className="container flex justify-between flex-wrap gap-5 sm:flex-nowrap">
+      <div
+        className={cn(
+          "container flex justify-between flex-wrap gap-5",
+          type === "desktop" ? "sm:flex-nowrap" : ""
+        )}
+      >
         {/* title and thumbnail */}
-        <div className="flex items-center lg:w-3/12 gap-2">
+        <div
+          className={cn(
+            "flex items-center gap-2",
+            type === "desktop" ? "lg:w-3/12" : ""
+          )}
+        >
           <div className="flex flex-col gap-1">
             <h6 className="text-sm font-semibold truncate max-w-[100px]">
               {currentAudio.text}
@@ -128,7 +146,12 @@ export const Player = () => {
           </div>
         </div>
         {/* play/pause and next/prev icons */}
-        <div className="flex items-center justify-center gap-3 lg:w-2/12">
+        <div
+          className={cn(
+            "flex items-center justify-center gap-3",
+            type === "desktop" ? "lg:w-2/12" : ""
+          )}
+        >
           <Button
             variant="ghost"
             className="p-2"
@@ -162,7 +185,12 @@ export const Player = () => {
           </Button>
         </div>
         {/* progress */}
-        <div className="hidden lg:flex w-6/12 flex-col gap-1 justify-center">
+        <div
+          className={cn(
+            "hidden  w-6/12 flex-col gap-1 justify-center",
+            type === "desktop" ? "lg:flex" : ""
+          )}
+        >
           <Slider
             trackStyle={{ background: "rgb(126 34 206)" }}
             handleStyle={{
@@ -185,7 +213,12 @@ export const Player = () => {
           </div>
         </div>
         {/* settings */}
-        <div className="flex justify-end gap-3 lg:w-1/12">
+        <div
+          className={cn(
+            "flex justify-end gap-3 ",
+            type === "desktop" ? "lg:w-1/12" : ""
+          )}
+        >
           <div className="relative flex items-center h-full" ref={volumeRef}>
             {isVolumeOpen && (
               <div className="flex absolute -top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 shadow-lg w-8 h-20 rounded-2xl overflow-hidden py-4 justify-center">
