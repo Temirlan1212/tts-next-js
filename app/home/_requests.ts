@@ -18,16 +18,14 @@ export const saveUserAudio = async (payload: {
 
 export const fetchAudioList = async (
   user_id?: string,
-  callback?: Dispatch<SetStateAction<any>>,
   setLoading?: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
     if (!user_id) return;
     setLoading && setLoading(true);
     const response = await fetch("/api/user-audio?user_id=" + user_id);
-    const audioList = await response.json();
-    callback && callback(audioList);
-    return audioList;
+    const data = await response.json();
+    return data;
   } catch (error: any) {
     throw new Error(error);
   } finally {

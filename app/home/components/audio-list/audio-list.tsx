@@ -15,8 +15,13 @@ export function AudioList() {
   const user_id = useSession().data?.user?.role?._id;
   const status = useSession().status;
 
+  const handleAudioList = async () => {
+    const data = await fetchAudioList(user_id, setLoading);
+    if (data?.items) setAudioList(data.items);
+  };
+
   useEffect(() => {
-    if (audioList.length < 1) fetchAudioList(user_id, setAudioList, setLoading);
+    if (audioList.length < 1) handleAudioList();
   }, [user_id, audioList]);
 
   const handleAudio = (audio: AudioType) => {

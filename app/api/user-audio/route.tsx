@@ -29,11 +29,27 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const user_id = searchParams.get("user_id");
+  const limit = Number(searchParams.get("limit")) || 10;
+  const page = Number(searchParams.get("page")) || 1;
 
   try {
     await connectToDb();
-    const data = await UserAudio.find({ user_id });
-    return new NextResponse(JSON.stringify(data), { status: 200 });
+    const data = await UserAudio.find({ user_id })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 });
+    const count = await UserAudio.countDocuments();
+
+    return new NextResponse(
+      JSON.stringify({
+        items: data,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+      }),
+      {
+        status: 200,
+      }
+    );
   } catch (error: any) {
     return new NextResponse(
       JSON.stringify({

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { HuggingFaceForm } from "./components/hugging-face-form";
 import useAudio from "@/stores/audio";
+import useAudioBd from "@/stores/audio_bd";
 import { useSession } from "next-auth/react";
 import { saveUserAudio } from "../../_requests";
 
@@ -14,6 +15,7 @@ export default function HuggingFaceTTSView() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setCurrentAudio, setPlayer } = useAudio();
   const { data: session, status } = useSession();
+  const { setAudioList } = useAudioBd();
   /**
    * Handles the process of fetching audio data using the provided request.
    * @param {CreateSoundRequest} request - The request containing model URL and text.
@@ -57,6 +59,7 @@ export default function HuggingFaceTTSView() {
               text: request.text,
               user_id: session.user?.role?._id,
             });
+            setAudioList([]);
           }
         }
       }

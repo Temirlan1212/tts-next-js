@@ -6,6 +6,7 @@ import { ElevenLabsParams } from "./lib/models";
 import { ElevenLabsSettingsDialog } from "./components/eleven-labs-settings-dialog";
 import useElevenLabs from "./lib/_store";
 import useAudio from "@/stores/audio";
+import useAudioBd from "@/stores/audio_bd";
 import { useSession } from "next-auth/react";
 import { saveUserAudio } from "../../_requests";
 
@@ -18,6 +19,7 @@ export default function ElevenLabsTTSView() {
   const voice_settings = useElevenLabs().voice_settings;
   const { setCurrentAudio, setPlayer } = useAudio();
   const { data: session, status } = useSession();
+  const { setAudioList } = useAudioBd();
   /**
    * Handles the process of fetching audio data using the provided request.
    * @param {ElevenLabsParams} request - The request containing model URL and text.
@@ -55,6 +57,7 @@ export default function ElevenLabsTTSView() {
               text: request.text,
               user_id: session.user?.role?._id,
             });
+            setAudioList([]);
           }
         }
       }

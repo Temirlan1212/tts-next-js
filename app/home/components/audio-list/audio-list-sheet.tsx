@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { AudioList } from "./audio-list";
 import useAudio from "@/stores/audio_bd";
+import { cn } from "@/lib/utils";
 
 export function AudioListSheet() {
   const audio_store = useAudio();
@@ -20,16 +21,21 @@ export function AudioListSheet() {
       </SheetTrigger>
       <SheetContent className="p-0 !max-w-full sm:!max-w-[500px] w-full">
         <div className="h-full flex flex-col justify-between ">
-          <div className="flex flex-col p-5 pb-0">
+          <div className="flex flex-col py-5 pb-0">
             <SheetHeader>
-              <SheetTitle className="text-start">
+              <SheetTitle className="text-start px-5">
                 История аудиозаписей
               </SheetTitle>
               {/* <SheetDescription>
                 Make changes to your profile here. Click save when you're done.
               </SheetDescription> */}
             </SheetHeader>
-            <div className="h-full overflow-auto h-[84dvh]">
+            <div
+              className={cn(
+                "h-full overflow-auto px-5",
+                !audio_store.currentAudio.src ? "h-[95vh]" : "h-[84dvh]"
+              )}
+            >
               <AudioList />
             </div>
           </div>
