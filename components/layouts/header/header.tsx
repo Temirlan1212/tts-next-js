@@ -1,18 +1,30 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
-import Logo from "@/public/logo.svg";
-import { ProfileCombox } from "./profile-combox";
 import { ThemeToggler } from "./theme-toggler";
+import { UserNav } from "./user-nav";
+import Link from "next/link";
+import { ArrowRightCircle } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+import { LogoComponent } from "./logo";
 
-export default function Header() {
+export default async function Header() {
+  const session = await getServerSession(options);
   return (
     <div className="border-b">
       <div className="container flex items-center h-[4rem] justify-between">
-        <Logo className="w-[120px] mt-[5px]" />
+        <LogoComponent />
         <div className="flex gap-3">
           <ThemeToggler />
           {/* <ProfileCombox /> */}
+          {!!session ? (
+            <UserNav {...session} />
+          ) : (
+            <Link href="sign-in">
+              <Button variant="outline">
+                <ArrowRightCircle />
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </div>
