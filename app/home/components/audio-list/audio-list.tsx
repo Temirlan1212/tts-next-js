@@ -43,11 +43,11 @@ export function AudioList() {
               key={index}
               onClick={() => handleAudio({ ...audio, id: audio._id })}
               className={cn(
-                "min-h-[200px] sm:min-h-[115px] flex gap-2 text-xs relative cursor-pointer border duration-300 rounded-sm overflow-hidden p-2 flex-wrap",
-                isSelected ? "bg-slate-50" : ""
+                "min-h-[200px] sm:min-h-[115px] flex gap-2 text-xs relative cursor-pointer gap-5 border duration-300 rounded-sm overflow-hidden p-2 flex-wrap",
+                isSelected ? "shadow-sm border border border-gray-400" : ""
               )}
             >
-              <div className="w-full sm:w-[80px] h-24 justify-center items-center bg-slate-200 flex rounded-sm">
+              <div className="w-full sm:w-[80px] h-24 justify-center items-center border flex rounded-sm">
                 <Music2 />
               </div>
               <div className="w-8/12 flex flex-col gap-2 justify-center">
