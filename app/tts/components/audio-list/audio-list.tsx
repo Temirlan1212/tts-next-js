@@ -8,10 +8,12 @@ import { RecatangleSkeleton } from "@/components/skeletons/rectangle-skeleton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import useAudioUlutSoftHistory from "@/stores/audio_ulut_soft copy";
+import useAudioUlutSoft from "@/stores/audio_ulut_soft";
 
 export function AudioList() {
   const { currentAudio, setCurrentAudio, setAudioList, audioList } =
     useAudioUlutSoftHistory();
+  const { setPlayer } = useAudioUlutSoft();
   const [loading, setLoading] = useState<boolean>(false);
   const user_id = useSession().data?.user?.role?._id;
   const status = useSession().status;
@@ -26,6 +28,8 @@ export function AudioList() {
   }, [user_id, audioList]);
 
   useEffect(() => {
+    setPlayer(false);
+
     return () => {
       setCurrentAudio({ text: "", src: "" });
     };
