@@ -83,7 +83,7 @@ export function AudioList() {
   if (status === "unauthenticated") {
     content = (
       <div className="flex gap-3 flex-col items-center mt-5">
-        <p className="text-sm">
+        <p className="text-sm text-center">
           Войдите в аккаунт чтобы посмотреть историю аудиозаписей
         </p>
         <Link href="/sign-in">
