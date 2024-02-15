@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { TTSProps } from "./_store";
 import { getUlukSoftVoicesForm } from "./components/voices/lib/_store";
 
@@ -42,5 +43,44 @@ export const text2SpeechUlutSoft = async (
     throw new Error(error);
   } finally {
     setLoading && setLoading("ttsUlutSoft", false);
+  }
+};
+
+export const fetchAudioList = async (
+  user_id?: string,
+  setLoading?: Dispatch<SetStateAction<boolean>>
+) => {
+  try {
+    if (!user_id) return;
+    setLoading && setLoading(true);
+    const response = await fetch("/api/user-audio?user_id=" + user_id);
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
+    throw new Error(error);
+  } finally {
+    setLoading && setLoading(false);
+  }
+};
+
+export const saveUserAudio = async (payload: {
+  user_id?: string;
+  text?: string;
+  src?: string;
+  setLoading?: TTSProps["setLoadings"];
+}) => {
+  if (!payload?.user_id || !payload?.src || !payload?.text) return;
+  const setLoading = payload?.setLoading;
+  try {
+    setLoading && setLoading("saveAudio", true);
+    const response = await fetch("/api/user-audio", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    return await response.json();
+  } catch (error: any) {
+    throw new Error(error);
+  } finally {
+    setLoading && setLoading("saveAudio", false);
   }
 };

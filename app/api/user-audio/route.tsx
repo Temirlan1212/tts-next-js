@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const user_id = searchParams.get("user_id");
-  const limit = Number(searchParams.get("limit")) || 10;
+  const limit = Number(searchParams.get("limit")) || 5;
   const page = Number(searchParams.get("page")) || 1;
 
   try {

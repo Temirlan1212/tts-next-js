@@ -1,12 +1,17 @@
 import React, { MutableRefObject, Ref, useRef, useState } from "react";
 import { FileInput, Label } from "flowbite-react";
-import { imageToText, text2SpeechUlutSoft } from "../../_requests";
+import {
+  imageToText,
+  saveUserAudio,
+  text2SpeechUlutSoft,
+} from "../../_requests";
 import { Camera, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PreviewImage } from "./preview-image";
 import useTTS from "../../_store";
 import useAudioUlutSoft from "@/stores/audio_ulut_soft";
 import { WebCamDialog } from "./web-cam-dialog";
+import { useSession } from "next-auth/react";
 
 interface DropzoneProps {
   // Define props if needed
@@ -20,10 +25,12 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
   const loading_ttsUlutSoft = useTTS().loadings.ttsUlutSoft;
   const setCurrentAudio = useAudioUlutSoft().setCurrentAudio;
   const setPlayer = useAudioUlutSoft().setPlayer;
+  const setAudioList = useAudioUlutSoft().setAudioList;
   const setLoadings = useTTS().setLoadings;
   const setValue = useTTS().setValue;
   const [files, setFiles] = useState<FileList | null>(null);
   const [previewImage, setPreviewImage] = useState<string | undefined>();
+  const { data: session } = useSession();
 
   const handleSubmit = async () => {
     if (files == null) return;
@@ -34,6 +41,23 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
     setPlayer(true);
     setValue("text", text);
     setCurrentAudio({ src: base64audio, text }, { persistToHistory: false });
+    saveAudio({ text, base64audio });
+  };
+
+  const saveAudio = async ({
+    text,
+    base64audio,
+  }: {
+    text: string;
+    base64audio: string;
+  }) => {
+    const res = await saveUserAudio({
+      src: base64audio,
+      text,
+      user_id: session?.user?.role?._id,
+      setLoading: setLoadings,
+    });
+    if (res) setAudioList([]);
   };
 
   const hanldeOnChange = (files: FileList | null) => {

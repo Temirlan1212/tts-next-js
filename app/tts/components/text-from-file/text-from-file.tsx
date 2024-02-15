@@ -21,9 +21,10 @@ import {
   MAX_TEXT_LENGTH,
 } from "./lib/form-schema";
 import useTTS from "../../_store";
-import { text2SpeechUlutSoft } from "../../_requests";
+import { saveUserAudio, text2SpeechUlutSoft } from "../../_requests";
 import useAudioUlutSoft from "@/stores/audio_ulut_soft";
 import { RecatangleSkeleton } from "@/components/skeletons/rectangle-skeleton";
+import { useSession } from "next-auth/react";
 
 // Define the validation schema for the form fields
 
@@ -39,6 +40,8 @@ export function TextFromFilesForm(props: TextFromFilesForm) {
   const setLoadings = useTTS().setLoadings;
   const loading = useTTS().loadings.ttsUlutSoft;
   const setCurrentAudio = useAudioUlutSoft().setCurrentAudio;
+  const setAudioList = useAudioUlutSoft().setAudioList;
+  const { data: session } = useSession();
   // Initialize the react-hook-form with the validation schema
   const form = useForm<FormSchemaProps>({
     resolver: zodResolver(FormSchema),
@@ -55,7 +58,24 @@ export function TextFromFilesForm(props: TextFromFilesForm) {
       { persistToHistory: false }
     );
     setFormSubmitting(false);
+    saveAudio({ text: data.text, base64audio });
   }
+
+  const saveAudio = async ({
+    text,
+    base64audio,
+  }: {
+    text: string;
+    base64audio: string;
+  }) => {
+    const res = await saveUserAudio({
+      src: base64audio,
+      text,
+      user_id: session?.user?.role?._id,
+      setLoading: setLoadings,
+    });
+    if (res) setAudioList([]);
+  };
 
   if (loading) return <RecatangleSkeleton />;
   if (!text) return;

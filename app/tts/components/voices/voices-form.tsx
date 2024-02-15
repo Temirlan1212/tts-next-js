@@ -42,7 +42,7 @@ export function VoicesForm(props: VoicesForm) {
   async function onSubmit(data: FormSchemaProps) {}
 
   return (
-    <div>
+    <div className="w-full">
       {/* Form component that uses react-hook-form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
