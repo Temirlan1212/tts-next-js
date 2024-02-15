@@ -1,18 +1,19 @@
-import React, { MutableRefObject, Ref, useRef, useState } from "react";
-import { FileInput, Label } from "flowbite-react";
+import React, { useRef, useState } from "react";
 import {
   imageToText,
   saveUserAudio,
   text2SpeechUlutSoft,
 } from "../../_requests";
-import { Camera, UploadCloud } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PreviewImage } from "./preview-image";
 import useTTS from "../../_store";
 import useAudioUlutSoft from "@/stores/audio_ulut_soft";
 import { WebCamDialog } from "./web-cam-dialog";
 import { useSession } from "next-auth/react";
+import { FileUploader } from "react-drag-drop-files";
 
+const fileTypes = ["JPG", "PNG", "GIF"];
 interface DropzoneProps {
   // Define props if needed
 }
@@ -100,27 +101,27 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
   return (
     <div className="flex w-full flex-col gap-3 relative">
       <div className="flex gap-4 flex-col sm:flex-row">
-        <Label
-          htmlFor="dropzone-file"
-          className="relative dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-50 dark:bg-background hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-        >
-          <div className="flex flex-col items-center justify-center pb-6 pt-5">
-            <UploadCloud className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400 text-center">
-              <span className="font-semibold">Нажмите, чтобы загрузить</span>{" "}
-              или перетащите
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-              SVG, PNG, JPG or GIF (MAX. 800x400px)
-            </p>
-          </div>
-          <FileInput
+        <div className="relative dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-50 dark:bg-background hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+          <FileUploader
             ref={fileFieldRef as any}
-            id="dropzone-file"
-            className="hidden"
+            handleChange={(files: FileList) => {
+              hanldeOnChange(files);
+            }}
+            name="file"
+            classes="!w-full !h-full flex items-center justify-center"
             multiple
-            onChange={(e) => hanldeOnChange(e.target.files)}
-          />
+          >
+            <div className="flex flex-col items-center justify-center pb-6 pt-5">
+              <UploadCloud className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400 text-center">
+                <span className="font-semibold">Нажмите, чтобы загрузить</span>{" "}
+                или перетащите
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                SVG, PNG, JPG or GIF (MAX. 800x400px)
+              </p>
+            </div>
+          </FileUploader>
 
           <div className="absolute top-5 right-5 hidden md:block">
             <WebCamDialog
@@ -151,7 +152,7 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
               </div>
             </div>
           )}
-        </Label>
+        </div>
 
         {previewImage && files && (
           <PreviewImage
