@@ -1,4 +1,5 @@
 import { TTSProps } from "./_store";
+import { getUlukSoftVoicesForm } from "./components/voices/lib/_store";
 
 export const imageToText = async (
   file: File,
@@ -22,14 +23,18 @@ export const imageToText = async (
 };
 
 export const text2SpeechUlutSoft = async (
-  { text, speaker_id }: { text: string; speaker_id?: number },
+  { text }: { text: string },
   setLoading?: TTSProps["setLoadings"]
 ) => {
+  let speaker_id = "1";
+  const v = getUlukSoftVoicesForm();
+  if (!!v?.speaker_id) speaker_id = v.speaker_id;
+
   try {
     setLoading && setLoading("ttsUlutSoft", true);
     const response = await fetch("/api/generate/ulut-soft-tts", {
       method: "POST",
-      body: JSON.stringify({ text, speaker_id: speaker_id || 1 }),
+      body: JSON.stringify({ text, speaker_id }),
     });
 
     return await response.text();
