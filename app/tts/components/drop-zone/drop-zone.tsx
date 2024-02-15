@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MutableRefObject, Ref, useRef, useState } from "react";
 import { FileInput, Label } from "flowbite-react";
 import { imageToText, text2SpeechUlutSoft } from "../../_requests";
 import { UploadCloud } from "lucide-react";
@@ -11,7 +11,10 @@ interface DropzoneProps {
   // Define props if needed
 }
 
+type fileFieldRefProps = HTMLInputElement | undefined;
+
 export const Dropzone: React.FC<DropzoneProps> = () => {
+  const fileFieldRef = useRef<fileFieldRefProps>(undefined);
   const loading_img2text = useTTS().loadings.img2text;
   const loading_ttsUlutSoft = useTTS().loadings.ttsUlutSoft;
   const setCurrentAudio = useAudioUlutSoft().setCurrentAudio;
@@ -61,6 +64,9 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
     resetImagePreview();
     setValue("text", "");
     setCurrentAudio({ text: "", src: "" });
+    if (fileFieldRef.current != null) {
+      fileFieldRef.current.value = "";
+    }
   };
 
   const isSelected = !!files;
@@ -83,6 +89,7 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
             </p>
           </div>
           <FileInput
+            ref={fileFieldRef as any}
             id="dropzone-file"
             className="hidden"
             multiple
