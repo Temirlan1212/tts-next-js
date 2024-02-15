@@ -36,7 +36,11 @@ export function ImagePreviewDialog({ previewImage }: { previewImage: string }) {
       </DialogTrigger>
       <DialogContent className="w-full h-full max-w-[60dvw] max-h-[80dvh] overflow-auto">
         <div className="flex items-center space-x-2">
-          <img src={previewImage} alt="Preview" />
+          <img
+            src={previewImage}
+            alt="Preview"
+            className="border p-2 rounded-lg border-dashed"
+          />
         </div>
       </DialogContent>
     </Dialog>
