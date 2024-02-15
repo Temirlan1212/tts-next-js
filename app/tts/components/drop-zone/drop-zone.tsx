@@ -80,11 +80,11 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
         >
           <div className="flex flex-col items-center justify-center pb-6 pt-5">
             <UploadCloud className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400 text-center">
               <span className="font-semibold">Нажмите, чтобы загрузить</span>{" "}
               или перетащите
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
               SVG, PNG, JPG or GIF (MAX. 800x400px)
             </p>
           </div>
