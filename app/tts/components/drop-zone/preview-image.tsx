@@ -34,7 +34,7 @@ export function ImagePreviewDialog({ previewImage }: { previewImage: string }) {
       <DialogTrigger asChild>
         <Expand className="absolute z-10 top-[-10px] left-[-10px] bg-slate-100 hover:bg-slate-200 cursor-pointer text-gray-600 w-[24px] h-[24px] p-[4px] border rounded-full" />
       </DialogTrigger>
-      <DialogContent className="w-full h-full max-w-[60dvw] max-h-[80dvh] overflow-auto">
+      <DialogContent className="w-full h-full max-w-[85dvw] lg:max-w-[60dvw] sm:max-w-[75dvw] max-h-[80dvh] overflow-auto rounded-lg">
         <div className="flex items-center space-x-2">
           <img
             src={previewImage}
