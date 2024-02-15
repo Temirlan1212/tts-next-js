@@ -33,8 +33,8 @@ export function SignInForm() {
     resolver: zodResolver(userFormSchema),
     defaultValues: {
       email: "",
-      username: "",
-      password: "",
+      username: "admin",
+      password: "admin",
     },
   });
 
