@@ -1,11 +1,12 @@
 import React, { MutableRefObject, Ref, useRef, useState } from "react";
 import { FileInput, Label } from "flowbite-react";
 import { imageToText, text2SpeechUlutSoft } from "../../_requests";
-import { UploadCloud } from "lucide-react";
+import { Camera, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PreviewImage } from "./preview-image";
 import useTTS from "../../_store";
 import useAudioUlutSoft from "@/stores/audio_ulut_soft";
+import { WebCamDialog } from "./web-cam-dialog";
 
 interface DropzoneProps {
   // Define props if needed
@@ -27,6 +28,7 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
   const handleSubmit = async () => {
     if (files == null) return;
     const text = await imageToText(files[0], setLoadings);
+    if (!text) return;
     const audio = await text2SpeechUlutSoft({ text }, setLoadings);
     const base64audio = `data:audio/wav;base64,${audio}`;
     setPlayer(true);
@@ -95,6 +97,16 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
             multiple
             onChange={(e) => hanldeOnChange(e.target.files)}
           />
+
+          <div className="absolute top-5 right-5 hidden md:block">
+            <WebCamDialog
+              onSubmit={(url, files) => {
+                setPreviewImage(url);
+                setFiles(files);
+              }}
+            />
+          </div>
+
           {isSelected && (
             <div className="gap-4 flex-wrap bg-slate-500 absolute w-full h-full flex justify-center items-center rounded-lg bg-opacity-25 backdrop-blur-sm">
               <div className="flex flex-col sm:!flex-row w-[fit-content] gap-4">
@@ -117,7 +129,7 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
           )}
         </Label>
 
-        {previewImage && !!files && (
+        {previewImage && files && (
           <PreviewImage
             previewImage={previewImage}
             onReset={resetAllWithStopPropogation}
