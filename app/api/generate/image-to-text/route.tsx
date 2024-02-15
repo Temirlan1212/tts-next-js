@@ -3,10 +3,11 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
 
-  // Remember to enforce type here and after use some lib like zod.js to check it
-  // const file = formData.getAll("file") as unknown as File;
+  if (!process.env.PYTHON_URL) {
+    throw new Error("Missing 'Hugging Face Access Token'");
+  }
 
-  const response = await fetch("http://35.184.61.173/api/v1/image/", {
+  const response = await fetch(process.env.PYTHON_URL + "/api/v1/image/", {
     method: "POST",
     body: formData,
   });

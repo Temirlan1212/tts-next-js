@@ -32,7 +32,7 @@ export default async function RootLayout({
             enableSystem
           >
             <Header />
-            <div className="grow flex items-center">{children}</div>
+            <div className="grow flex pt-5">{children}</div>
             {/* <Footer /> */}
           </NextThemeProvider>
         </NextAuthProvider>
