@@ -37,10 +37,13 @@ export const Dropzone: React.FC<DropzoneProps> = () => {
     if (files == null) return;
     const text = await imageToText(files[0], setLoadings);
     if (!text) return;
-    const audio = await text2SpeechUlutSoft({ text }, setLoadings);
+    const audio = await text2SpeechUlutSoft(
+      { text: text.slice(0, 1000) },
+      setLoadings
+    );
     const base64audio = `data:audio/wav;base64,${audio}`;
     setPlayer(true);
-    setValue("text", text);
+    setValue("text", text.slice(0, 1000));
     setCurrentAudio({ src: base64audio, text }, { persistToHistory: false });
     saveAudio({ text, base64audio });
   };

@@ -78,7 +78,7 @@ export function TextFromFilesForm(props: TextFromFilesForm) {
   };
 
   if (loading) return <RecatangleSkeleton />;
-  if (!text) return;
+  // if (!text) return;
 
   return (
     <div>
